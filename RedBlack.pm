@@ -3,7 +3,7 @@ package Tree::RedBlack;
 use strict;
 use Tree::RedBlack::Node;
 use vars qw($VERSION);
-$VERSION = '0.1';
+$VERSION = '0.2';
 
 =head1 NAME
 
@@ -97,7 +97,8 @@ Tree::RedBlack::Node
 
 sub new {
   my $type = shift;
-  return bless {'root' => undef}, $type;
+  return bless {'null' => Tree::RedBlack::Node::->new,
+		'root' => undef}, $type;
 }
 
 sub root {
@@ -239,7 +240,7 @@ sub delete {
   if ($successor->left) {
     $successor_child = $successor->left;
   } else {
-    $successor_child = $successor->right || new Tree::RedBlack::Node;
+    $successor_child = $successor->right || $this->{'null'};
   }
   $successor_child->parent($successor->parent);
   if (!$successor_child || !$successor_child->parent) {
@@ -258,13 +259,6 @@ sub delete {
   }
   if (!$successor_child->parent) {
     $this->{'root'} = undef;
-  } elsif (!$successor_child->key) {
-    if ($successor_child->parent->left == $successor_child) {
-      $successor_child->parent->left(undef);
-    } else {
-      $successor_child->parent->right(undef);
-    }
-    $successor_child->parent(undef);
   }
   $successor;
 }
@@ -281,16 +275,7 @@ sub delete_fixup {
       }
       if (!$w->left->color && !$w->right->color) {
 	$w->color(1);
-	my $parent = $x->parent;
-	unless ($x->key) { # $x is a sentinel; unlink it from its parent
-	  if ($parent->left == $x) {
-	    $parent->left(undef);
-	  } else {
-	    $parent->right(undef);
-	  }
-	  $x->parent(undef);
-	}
-	$x = $parent;
+	$x = $x->parent;
       } else {
 	if (!$w->right->color) {
 	  $w->left->color(0);
@@ -302,14 +287,6 @@ sub delete_fixup {
 	$x->parent->color(0);
 	$w->right->color(0);
 	$this->left_rotate($x->parent);
-	unless ($x->key) { # $x is a sentinel; unlink it from its parent
-	  if ($x->parent->left == $x) {
-	    $x->parent->left(undef);
-	  } else {
-	    $x->parent->right(undef);
-	  }
-	  $x->parent(undef);
-	}
 	$x = $this->{'root'};
       }
     } else {
@@ -321,16 +298,7 @@ sub delete_fixup {
       }
       if (!$w->left->color && !$w->right->color) {
 	$w->color(1);
-	my $parent = $x->parent;
-	unless ($x->key) { # $x is a sentinel; unlink it from its parent
-	  if ($parent->left == $x) {
-	    $parent->left(undef);
-	  } else {
-	    $parent->right(undef);
-	  }
-	  $x->parent(undef);
-	}
-	$x = $parent;
+	$x = $x->parent;
       } else {
 	if (!$w->left->color) {
 	  $w->right->color(0);
@@ -342,14 +310,6 @@ sub delete_fixup {
 	$x->parent->color(0);
 	$w->left->color(0);
 	$this->right_rotate($x->parent);
-	unless ($x->key) { # $x is a sentinel; unlink it from its parent
-	  if ($x->parent->left == $x) {
-	    $x->parent->left(undef);
-	  } else {
-	    $x->parent->right(undef);
-	  }
-	  $x->parent(undef);
-	}
 	$x = $this->{'root'};
       }
     }
