@@ -1,4 +1,4 @@
-Tree::RedBlack version 0.2
+Tree::RedBlack version 0.3
 ------------------------------------------------------------------------
     This program is free software; you can redistribute it and/or modify
     it under the terms of the Artistic License, a copy of which can be
@@ -10,7 +10,7 @@ Tree::RedBlack version 0.2
     Artistic License for more details.
 ------------------------------------------------------------------------
 
-       *** This is alpha software -- use at your own risk ***
+       *** This is beta software -- use at your own risk ***
 
 Introduction
 ------------
@@ -38,6 +38,11 @@ Installation follows the normal module installation procedure:
 
 Changes
 -------
+Version 0.3
+	Fixed memory leak since nodes pointed to their parents. Now,
+	DESTROY does a tree-traversal.  Still haven't fixed delete.
+	I don't think the interface is going to change, so I've upgraded this
+	module to beta status.
 
 Version 0.2
 	Major mess-up in Makefile.PL made it un-installable.
@@ -50,4 +55,4 @@ Feedback
 --------
 
 Please report any bugs or feature requests to Benjamin Holzman at
-<bholzman@bender.com>
+<bholzman@earthlink.net>

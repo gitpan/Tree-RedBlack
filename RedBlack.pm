@@ -3,7 +3,7 @@ package Tree::RedBlack;
 use strict;
 use Tree::RedBlack::Node;
 use vars qw($VERSION);
-$VERSION = '0.2';
+$VERSION = '0.3';
 
 =head1 NAME
 
@@ -25,10 +25,11 @@ Tree::RedBlack - Perl implementation of Red/Black tree, a type of balanced tree.
 =head1 DESCRIPTION
 
 This is a perl implementation of the Red/Black tree algorithm found in the book
-"Algorithms", by Cormen, Leiserson & Rivest (more commonly known as "CLR" or "The
-White Book").  A Red/Black tree is a binary tree which remains "balanced" - that is,
-the longest length from root to a node is at most one more than the shortest such
-length.  It is fairly efficient; no operation takes more than O(lg(n)) time.
+"Algorithms", by Cormen, Leiserson & Rivest (more commonly known as "CLR" or
+"The White Book").  A Red/Black tree is a binary tree which remains "balanced"-
+that is, the longest length from root to a node is at most one more than the
+shortest such length.  It is fairly efficient; no operation takes more than
+O(lg(n)) time.
 
 A Tree::RedBlack object supports the following methods:
 
@@ -40,40 +41,42 @@ Creates a new RedBlack tree object.
 
 =item root ()
 
-Returns the root node of the tree.  Note that this will either be undef if no nodes
-have been added to the tree, or a Tree::RedBlack::Node object.  See the
+Returns the root node of the tree.  Note that this will either be undef if no
+nodes have been added to the tree, or a Tree::RedBlack::Node object.  See the
 L<Tree::RedBlack::Node> manual page for details on the Node object.
 
 =item cmp (&)
 
 Use this method to set a comparator subroutine.  The tree defaults to lexical
-comparisons.  This subroutine should be just like a comparator subroutine to sort,
-except that it doesn't do the $a, $b trick; the two elements to compare will just be
-the first two items on the stack.
+comparisons.  This subroutine should be just like a comparator subroutine to
+sort, except that it doesn't do the $a, $b trick; the two elements to compare
+will just be the first two items on the stack.
 
 =item insert ($;$)
 
-Adds a new node to the tree.  The first argument is the key of the node, the second
-is its value.  If a node with that key already exists, its value is replaced with the
-given value and the old value is returned.  Otherwise, undef is returned.
+Adds a new node to the tree.  The first argument is the key of the node, the
+second is its value.  If a node with that key already exists, its value is
+replaced with the given value and the old value is returned.  Otherwise, undef
+is returned.
 
 =item delete ($)
 
-The argument should be either a node object to delete or the key of a node object to
-delete. WARNING!!! THIS STILL HAS BUGS!!!
+The argument should be either a node object to delete or the key of a node
+object to delete. WARNING!!! THIS STILL HAS BUGS!!!
 
 =item find ($)
 
-Searches the tree to find the node with the given key.  Returns the value of that
-node, or undef if a node with that key isn't found.  Note, in particular, that you
-can't tell the difference between finding a node with value undef and not finding a
-node at all.  If you want to determine if a node with a given key exists, use the
-node method, below.
+Searches the tree to find the node with the given key.  Returns the value of
+that node, or undef if a node with that key isn't found.  Note, in particular,
+that you can't tell the difference between finding a node with value undef and
+not finding a node at all.  If you want to determine if a node with a given key
+exists, use the node method, below.
 
 =item node ($)
 
-Searches the tree to find the node with the given key.  Returns that node object if
-it is found, undef otherwise.  The node object is a Tree::RedBlack::Node object.
+Searches the tree to find the node with the given key.  Returns that node
+object if it is found, undef otherwise.  The node object is a
+Tree::RedBlack::Node object.
 
 =item min ()
 
@@ -87,7 +90,7 @@ Returns the node with the maximal key.
 
 =head1 AUTHOR
 
-Benjamin Holzman <bholzman@bender.com>
+Benjamin Holzman <bholzman@earthlink.net>
 
 =head1 SEE ALSO
 
@@ -100,6 +103,8 @@ sub new {
   return bless {'null' => Tree::RedBlack::Node::->new,
 		'root' => undef}, $type;
 }
+
+sub DESTROY { if ($_[0]->{'root'}) { $_[0]->{'root'}->DESTROY } }
 
 sub root {
   my $this = shift;

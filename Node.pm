@@ -26,8 +26,8 @@ Key of the node.  This is what the nodes are sorted by in the tree.
 
 =item val ($)
 
-Value of the node.  Can be any perl scalar, so it could be a hash-ref, f'rinstance.
-This can be set directly.
+Value of the node.  Can be any perl scalar, so it could be a hash-ref,
+f'rinstance.  This can be set directly.
 
 =item color ()
 
@@ -55,8 +55,8 @@ Returns the node with the maximal key starting from this node.
 
 =item successor ()
 
-Returns the node with the smallest key larger than this node's key, or this node if
-it is the node with the maximal key.
+Returns the node with the smallest key larger than this node's key, or this
+node if it is the node with the maximal key.
 
 =item predecessor ()
 
@@ -64,9 +64,10 @@ Similar to successor. WARNING: NOT YET IMPLEMENTED!!
 
 =back
 
-You can use these methods to write utility routines for actions on red/black trees.
-For instance, here's a routine which writes a tree out to disk, putting the byte
-offsets of the left and right child records in the record for each node.
+You can use these methods to write utility routines for actions on red/black
+trees.  For instance, here's a routine which writes a tree out to disk, putting
+the byte offsets of the left and right child records in the record for each
+node.
 
     sub dump {
       my($node, $fh) = @_;
@@ -96,8 +97,8 @@ You would call it like this:
     dump($t->root,\*FILE);
     close FILE;
 
-As another example, here's a simple routine to print a human-readable dump of the
-tree:
+As another example, here's a simple routine to print a human-readable dump of
+the tree:
 
     sub pretty_print {
       my($node, $fh, $lvl) = @_;
@@ -116,7 +117,7 @@ argument saying what class of node it should be made up out of. Hmmm...
 
 =head1 AUTHOR
 
-Benjamin Holzman <bholzman@bender.com>
+Benjamin Holzman <bholzman@earthlink.net>
 
 =head1 SEE ALSO
 
@@ -135,6 +136,16 @@ sub new {
     @$this{'key','val'} = @_;
   }
   return bless $this, $type;
+}
+
+sub DESTROY {
+  if ($_[0]->{'left'}) { 
+    (delete $_[0]->{'left'})->DESTROY;
+  }
+  if ($_[0]->{'right'}) {
+    (delete $_[0]->{'right'})->DESTROY;
+  }
+  delete $_[0]->{'parent'};
 }
 
 sub key {
