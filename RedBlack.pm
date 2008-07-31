@@ -3,7 +3,7 @@ package Tree::RedBlack;
 use strict;
 use Tree::RedBlack::Node;
 use vars qw($VERSION);
-$VERSION = '0.4';
+$VERSION = '0.5';
 
 =head1 NAME
 
@@ -148,7 +148,7 @@ sub insert {
   }
   $node->color(1);
   while ($node != $this->{'root'} && $node->parent->color) {
-    if ($node->parent == $node->parent->parent->left) {
+    if (defined $node->parent->parent->left && $node->parent == $node->parent->parent->left) {
       my $uncle = $node->parent->parent->right;
       if ($uncle && $uncle->color) {
 	$node->parent->color(0);
@@ -172,7 +172,7 @@ sub insert {
 	$node->parent->parent->color(1);
 	$node = $node->parent->parent;
       } else {
-	if ($node == $node->parent->left) {
+	if (defined $node->parent->left && $node == $node->parent->left) {
 	  $node = $node->parent;
 	  $this->right_rotate($node);
 	}
