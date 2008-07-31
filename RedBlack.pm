@@ -3,7 +3,7 @@ package Tree::RedBlack;
 use strict;
 use Tree::RedBlack::Node;
 use vars qw($VERSION);
-$VERSION = '0.3';
+$VERSION = '0.4';
 
 =head1 NAME
 
@@ -137,7 +137,7 @@ sub insert {
       return $val;
     }
     $node = $parent->new($key, $value);
-    if ($this->{'cmp'} ? $this->{'cmp'}->($key, $node->key) < 0
+    if ($this->{'cmp'} ? $this->{'cmp'}->($key, $parent->key) < 0
 		       : $key lt $parent->key) {
       $parent->left($node);
     } else {
@@ -257,7 +257,7 @@ sub delete {
   }
   if ($successor != $node) {
     $node->key($successor->key);
-    $node->value($successor->value);
+    $node->val($successor->val);
   }
   if (!$successor->color) {
     $this->delete_fixup($successor_child);

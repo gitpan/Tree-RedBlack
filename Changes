@@ -11,3 +11,7 @@ Revision history for Perl extension Tree::RedBlack.
 
 0.3   Tue Jun 29 10:53:00 1999
 	- fixed memory leak; bholzman
+
+0.4   Thu Jul 31 10:33:00 2008
+	- fixed misspelled method name (value instead of val), ID 13482
+	- fix bug when using custom comparator, ID 19431
